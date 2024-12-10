@@ -146,4 +146,3 @@ Predicate Information (identified by operation id):
    2 - access("SEX"='m')
 
 14 rows selected.
-
