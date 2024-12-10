@@ -1,0 +1,169 @@
+A2: Write a C program to demonstrate indexing and associated operations.
+#include <stdio.h>
+#include <sqlca.h>
+EXEC SQL INCLUDE SQLCA;
+
+int main() {
+    // Connect to the database
+    //EXEC SQL CONNECT :username IDENTIFIED BY :password;
+    EXEC SQL CONNECT :22cs031 IDENTIFIED BY :a;
+
+    if (sqlca.sqlcode != 0) {
+        printf("Error connecting to the database: %d\n", sqlca.sqlcode);
+        return 1;
+    }
+
+    printf("Connected to the database.\n");
+
+    // Create a table
+    EXEC SQL EXECUTE IMMEDIATE "CREATE TABLE employees (emp_id NUMBER PRIMARY KEY, emp_name VARCHAR2(50), emp_dept VARCHAR2(30), emp_salary NUMBER)";
+
+    if (sqlca.sqlcode != 0) {
+        printf("Error creating table: %d\n", sqlca.sqlcode);
+        return 1;
+    }
+    printf("Table created successfully.\n");
+
+    // Insert data
+    EXEC SQL EXECUTE IMMEDIATE "INSERT INTO employees (emp_id, emp_name, emp_dept, emp_salary) VALUES (101, 'AbdulBasith', 'HR', 50000)";
+
+    if (sqlca.sqlcode != 0) {
+        printf("Error inserting data: %d\n", sqlca.sqlcode);
+        return 1;
+    }
+    printf("Data inserted successfully.\n");
+
+    // Create an index
+    EXEC SQL EXECUTE IMMEDIATE "CREATE INDEX emp_dept_idx ON employees(emp_dept)";
+
+    if (sqlca.sqlcode != 0) {
+        printf("Error creating index: %d\n", sqlca.sqlcode);
+        return 1;
+    }
+    printf("Index created successfully.\n");
+
+    // Query the data (with index)
+    EXEC SQL EXECUTE IMMEDIATE "SELECT * FROM employees WHERE emp_dept = 'HR'";
+
+    if (sqlca.sqlcode != 0) {
+        printf("Error querying data: %d\n", sqlca.sqlcode);
+        return 1;
+    }
+
+    // Drop the index
+    EXEC SQL EXECUTE IMMEDIATE "DROP INDEX emp_dept_idx";
+
+    if (sqlca.sqlcode != 0) {
+        printf("Error dropping index: %d\n", sqlca.sqlcode);
+        return 1;
+    }
+    printf("Index dropped successfully.\n");
+
+    // Commit and disconnect
+    EXEC SQL COMMIT WORK;
+    EXEC SQL DISCONNECT;
+    
+    printf("Disconnected from the database.\n");
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Indexing with only SQL commands:
+
+/*Create a table*/
+Create table employee
+(
+	empno integer not null
+	constraint EMPLOYEE_PK_VIOLATION
+	primary key,
+	empname char(20) not null,
+	sex char(1) not null
+	Constraint EMPLOYEE_SEX_VIOLATION
+	check (sex in ('m','f')),
+	phone integer null,
+	dob date default '01-jan-1901' not null
+);
+/*Insert data into table*/
+Insert into employee  values(&eno,&ename,&sex,&phone,&dob);	
+
+/*Create a Index on sex*/
+Create INDEX empsex_index on employee(sex);
+/*Query the data*/
+Select * From employee where sex= ‘m’;
+/*View the query execution plan*/
+EXPLAIN PLAN FOR
+SELECT * FROM employees WHERE sex = ‘m’;
+SELECT * FROM table(DBMS_XPLAN.DISPLAY);
+
+Output:
+
+SQL> Create INDEX empsex_index on employee(sex);
+Index created.
+SQL> select * from employee where sex='m';
+
+
+
+
+
+     EMPNO EMPNAME              S      PHONE 	DOB
+---------- -------------------- - ---------- -------------  --------------
+         1 gouse          	            m 	9035789789 	05-MAY-03
+         2 bhanu                	m       	4165 		19-MAY-03
+         3 abhishek             	m        	897 		12-DEC-04
+         4 dhanu                  	m        	732 		18-AUG-05
+         5 pratham              	m         46 		17-JUN-12
+         6 lalit                		m       	7896 		14-SEP-05
+         7 akhil                		m        	135 		14-AUG-02
+         8 suresh                	m       	5285 		03-DEC-07
+         9 chinmay              	m      	45625 		23-NOV-12
+
+SQL> Explain plan for
+  2  select * from employee where sex='m';
+Explained.
+SQL> SELECT * FROM table(DBMS_XPLAN.DISPLAY);
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------
+Plan hash value: 4021620938
+--------------------------------------------------------------------------------
+| Id  | Operation                   | Name         | Rows  | Bytes | Cost (%CPU)   | Time     |
+--------------------------------------------------------------------------------
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT            |              |     6 |   228 |     2   (0)
+| 00:00:01 |
+
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMPLOYEE     |     6 |   228 |     2   (0)
+| 00:00:01 |
+
+|*  2 |   INDEX RANGE SCAN          | EMPSEX_INDEX |     6 |       |     1   (0)
+| 00:00:01 |
+--------------------------------------------------------------------------------
+------------
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   2 - access("SEX"='m')
+
+14 rows selected.
+
