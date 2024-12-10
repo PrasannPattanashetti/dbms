@@ -6,7 +6,7 @@ EXEC SQL INCLUDE SQLCA;
 int main() {
     // Connect to the database
     //EXEC SQL CONNECT :username IDENTIFIED BY :password;
-    EXEC SQL CONNECT :22cs031 IDENTIFIED BY :a;
+    EXEC SQL CONNECT :22cs061 IDENTIFIED BY :a;
 
     if (sqlca.sqlcode != 0) {
         printf("Error connecting to the database: %d\n", sqlca.sqlcode);
@@ -25,7 +25,7 @@ int main() {
     printf("Table created successfully.\n");
 
     // Insert data
-    EXEC SQL EXECUTE IMMEDIATE "INSERT INTO employees (emp_id, emp_name, emp_dept, emp_salary) VALUES (101, 'AbdulBasith', 'HR', 50000)";
+    EXEC SQL EXECUTE IMMEDIATE "INSERT INTO employees (emp_id, emp_name, emp_dept, emp_salary) VALUES (101, 'Ashish', 'HR', 100000)";
 
     if (sqlca.sqlcode != 0) {
         printf("Error inserting data: %d\n", sqlca.sqlcode);
@@ -67,26 +67,6 @@ int main() {
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Indexing with only SQL commands:
 
 /*Create a table*/
@@ -125,16 +105,16 @@ SQL> select * from employee where sex='m';
 
 
      EMPNO EMPNAME              S      PHONE 	DOB
----------- -------------------- - ---------- -------------  --------------
-         1 gouse          	            m 	9035789789 	05-MAY-03
-         2 bhanu                	m       	4165 		19-MAY-03
-         3 abhishek             	m        	897 		12-DEC-04
-         4 dhanu                  	m        	732 		18-AUG-05
-         5 pratham              	m         46 		17-JUN-12
-         6 lalit                		m       	7896 		14-SEP-05
-         7 akhil                		m        	135 		14-AUG-02
-         8 suresh                	m       	5285 		03-DEC-07
-         9 chinmay              	m      	45625 		23-NOV-12
+---------- -------------------- - ---------- ------------- 
+         1 Ashish               m  903 	      05-MAY-03
+         2 Ashok                m  416 	      19-MAY-03
+         3 Arvind             	m  897 	      12-DEC-04
+         4 Anand                m  732 	      18-AUG-05
+         5 Akash              	m  461 	      17-JUN-12
+         6 Alok                	m  786	      14-SEP-05
+         7 Abhishek             m  135 	      14-AUG-02
+         8 Abhinav              m  588	      03-DEC-07
+         9 Altaf                m  625 	      23-NOV-12
 
 SQL> Explain plan for
   2  select * from employee where sex='m';
