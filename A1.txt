@@ -73,7 +73,7 @@ int main() {
     return EXIT_SUCCESS;
 }
 Output:
-PS C:\Users\GOUSE-HOME> cd "c:\Users\GOUSE-HOME\Documents\" ; if ($?) { gcc dbmsA1.c -o dbmsA1 } ; if ($?) { .\dbmsA1 }
+PS C:\Users\PRASA-HOME> cd "c:\Users\PRASA-HOME\Documents\" ; if ($?) { gcc dbmsA1.c -o dbmsA1 } ; if ($?) { .\dbmsA1 }
 File 'dbms.txt' created successfully.
 Data written to file successfully.
 File closed successfully after writing.
@@ -81,4 +81,4 @@ File 'dbms.txt' opened for reading.
 Data read from file: Hello, this is a test file.
 File closed successfully after reading.
 File 'dbms.txt' deleted successfully.
-PS C:\Users\GOUSE-HOME\Documents>
+PS C:\Users\PRASA-HOME\Documents>
